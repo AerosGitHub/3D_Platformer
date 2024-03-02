@@ -1,12 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
     public GameObject fireballPrefab;
     public Transform attackPoint;
+    public int coins = 0;
     private int health = 10;
+    public AudioSource audioSource;
+    public AudioClip damageSound;
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +30,23 @@ public class Player : MonoBehaviour
     public void TakeDamage(int damage)
     {
         health -= damage;
-        print("Здоровье игрока: " + health);
+        
+        if (health > 0)
+        {
+            audioSource.PlayOneShot(damageSound);
+            print("Здоровье игрока: " + health);
+        }
+        else
+        {
+            int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+            SceneManager.LoadScene(sceneIndex);
+            print("Перезагрузка игры");
+        }
+    }
+
+    public void CollectCoins()
+    {
+        coins++;
+        print(coins);
     }
 }
